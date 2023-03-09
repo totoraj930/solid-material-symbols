@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "declarationDir": "./**/*.d.ts",
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "noUnusedLocals": false,
+    "lib": ["ES2021"]
+  },
+  "include": ["src/lib", "src/build"],
+  "exclude": ["node_modules", "**/__tests__/*", "scripts", "src/icons"]
+}

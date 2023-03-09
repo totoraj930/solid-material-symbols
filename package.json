@@ -1,0 +1,38 @@
+{
+  "name": "solid-material-symbols",
+  "version": "0.0.1",
+  "description": "Material Symbols for SolidJS",
+  "author": "Reona Oshima (totoraj)",
+  "license": "MIT",
+  "sideEffects": false,
+  "private": true,
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "",
+    "build": "node --no-warnings --loader ts-node/esm --experimental-specifier-resolution=node ./src/build/index.ts",
+    "build:lib": "rollup --configPlugin @rollup/plugin-typescript -c"
+  },
+  "devDependencies": {
+    "@material-symbols/svg-200": "0.4.6",
+    "@material-symbols/svg-400": "0.4.6",
+    "@material-symbols/svg-600": "0.4.6",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/node": "^18.15.0",
+    "prettier": "^2.8.4",
+    "rollup": "^3.18.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-preset-solid": "^2.0.1",
+    "solid-js": "^1.6.13",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "peerDependencies": {
+    "solid-js": "*"
+  }
+}
