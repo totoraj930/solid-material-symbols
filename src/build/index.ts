@@ -3,6 +3,7 @@ import nodePath from 'path';
 import { Icon, templates, TemplateType } from './template';
 import { promisify } from 'util';
 import { exec } from 'child_process';
+import { argv } from 'process';
 
 const execAsync = promisify(exec);
 
@@ -15,21 +16,24 @@ type ExportsField = Record<
   }
 >;
 
+const isJsonOnly = argv.includes('--json');
 async function main() {
-  await Promise.all([execAsync('yarn build:lib', { cwd: nodePath.resolve() })]);
-
-  console.log(`✨ Lib artifacts has been bundled ✅`);
-
-  const exportsField: ExportsField = {
-    ['.']: {
-      browser: './lib/index.js',
-      node: './lib/index.cjs',
-      default: './lib/index.cjs',
-    },
-  };
-
   const iconTypes = ['outlined', 'rounded', 'sharp'];
   const iconWeights = ['200', '400', '600'];
+
+  createPackageJson(createExportsField(iconTypes, iconWeights));
+  console.log(`📄 package.json has been generated ✅`);
+
+  fs.copyFileSync(nodePath.resolve('./README.md'), nodePath.resolve('./dist/README.md'));
+  console.log(`📄 README.md has been copied ✅`);
+
+  fs.copyFileSync(nodePath.resolve('./LICENSE'), nodePath.resolve('./dist/LICENSE'));
+  console.log(`📄 LICENSE has been copied ✅`);
+
+  if (isJsonOnly) return;
+
+  await Promise.all([execAsync('yarn build:lib', { cwd: nodePath.resolve() })]);
+  console.log(`✨ Lib artifacts has been bundled ✅`);
 
   for (const iconType of iconTypes) {
     noErrorMkdir(DIST_ROOT, iconType);
@@ -46,20 +50,35 @@ async function main() {
       dist('types', icons, distDirName);
 
       const exportRoot = `./${iconType}/${iconWeight}`;
+
+      console.log(`📦 ${exportRoot} package has been generated ✅`);
+    }
+  }
+}
+
+const ICON_MODULE_ROOT = nodePath.resolve('./node_modules/@material-symbols');
+const DIST_ROOT = nodePath.resolve('./dist');
+
+function createExportsField(iconTypes: string[], iconWeights: string[]) {
+  const exportsField: ExportsField = {
+    ['.']: {
+      browser: './lib/index.js',
+      node: './lib/index.cjs',
+      default: './lib/index.cjs',
+    },
+  };
+  for (const iconType of iconTypes) {
+    for (const iconWeight of iconWeights) {
+      const exportRoot = `./${iconType}/${iconWeight}`;
       exportsField[`${exportRoot}`] = {
         browser: `${exportRoot}/index.js`,
         node: `${exportRoot}/index.cjs`,
         default: `${exportRoot}/index.cjs`,
       };
-
-      console.log(`📦 ${exportRoot} package has been generated ✅`);
     }
   }
-  createPackageJson(exportsField);
+  return exportsField;
 }
-
-const ICON_MODULE_ROOT = nodePath.resolve('./node_modules/@material-symbols');
-const DIST_ROOT = nodePath.resolve('./dist');
 
 function createPackageJson(exportsField: ExportsField) {
   const packageJson = JSON.parse(
