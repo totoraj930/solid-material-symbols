@@ -38,5 +38,11 @@
     "type": "git",
     "url": "https://github.com/totoraj930/solid-material-symbols.git"
   },
-  "homepage": "https://github.com/totoraj930/solid-material-symbols"
+  "homepage": "https://github.com/totoraj930/solid-material-symbols",
+  "keywords": [
+    "solidjs",
+    "icons",
+    "svg",
+    "solid"
+  ]
 }
